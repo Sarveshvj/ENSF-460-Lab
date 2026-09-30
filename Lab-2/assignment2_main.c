@@ -109,9 +109,3 @@ void __attribute__((interrupt, no_auto_psv)) _T2Interrupt(void){
     
 }
 
-// You might it helpful to define the interrupt service routine for Timer 1 here
-void __attribute__((interrupt, no_auto_psv)) _T1Interrupt(void){
-    IFS0bits.T1IF = 0;
-    ms_count++;
-    
-}

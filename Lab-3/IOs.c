@@ -61,6 +61,12 @@ static void led(uint16_t period) {
 
 }
 
+static void displayState(char *msg)
+{
+    Disp2String("\r                           \r");
+    Disp2String(msg);
+}
+
 void IOcheck(void) {
     uint8_t s = (PB1 ? 1:0) | (PB2 ? 2 : 0) | (PB3 ? 4:0);
     
@@ -68,13 +74,13 @@ void IOcheck(void) {
     lastState = s;
     
     switch (s) {
-        case 0: led(LED_OFF);        Disp2String("Nothing is pressed\n\r"); break;
-        case 1: led(T3_025s);        Disp2String("PB1 event\n\r"); break;
-        case 2: led(T3_1s);          Disp2String("PB2 event\n\r"); break;
-        case 4: led(T3_3s);          Disp2String("PB3 event\n\r"); break;
-        case 3: led(LED_ON);         Disp2String("PB1 and PB2 pressed\n\r"); break;
-        case 5: led(LED_ON);         Disp2String("PB1 and PB3 pressed\n\r"); break;
-        case 6: led(LED_ON);         Disp2String("PB3 and PB2 pressed\n\r"); break;
-        case 7: led(LED_ON);         Disp2String("All PBs pressed\n\r"); break;
+        case 0: led(LED_OFF);        displayState("Nothing pressed"); break;
+        case 1: led(T3_025s);        displayState("PB1 is pressed"); break;
+        case 2: led(T3_1s);          displayState("PB2 is pressed"); break;
+        case 4: led(T3_3s);          displayState("PB3 is pressed"); break;
+        case 3: led(LED_ON);         displayState("PB1 and PB2 are pressed"); break;
+        case 5: led(LED_ON);         displayState("PB1 and PB3 are pressed"); break;
+        case 6: led(LED_ON);         displayState("PB3 and PB2 are pressed"); break;
+        case 7: led(LED_ON);         displayState("All PBs pressed"); break;
     }        
 }

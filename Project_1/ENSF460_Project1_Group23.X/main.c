@@ -5,19 +5,19 @@
  * Created on October 19, 2026, 11:03 PM
  */
 
-#include <xc.h>
-#include <stdio.h>
-#include <stdlib.h>
 
-/*
- * 
- */
-int main(void)
-{
-    while(1)
-    {
+#include <xc.h>
+#include "IOs.h"
+
+int main(void) {
+
+    IOinit();
+
+    while(1) {
+
         Idle();
-        
+
     }
+
     return 0;
 }

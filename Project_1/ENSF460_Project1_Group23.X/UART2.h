@@ -5,19 +5,11 @@
  * Created on October 19, 2026, 11:33 PM
  */
 
+
 #ifndef UART2_H
-#define	UART2_H
+#define UART2_H
 
-#ifdef	__cplusplus
-extern "C" {
+void InitUART2(void);
+void Disp2String(char *str);
+
 #endif
-
-
-
-
-#ifdef	__cplusplus
-}
-#endif
-
-#endif	/* UART2_H */
-

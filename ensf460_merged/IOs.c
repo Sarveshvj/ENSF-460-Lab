@@ -7,39 +7,17 @@
 
 #include <xc.h>
 #include "IOs.h"
-#include "display.h"     // print_time(), print_line()
-#include "countdown.h"   // minutes, seconds, Timer_Start()
+#include "display.h"   // print_time(), print_line()
+#include "countdown.h" // minutes, seconds, Timer_Start()
 
 /* The button levels IOcheck() acts on. setmode.c supplies them with
- * IOsetButtons(); 1 means pressed. (These replace the three
- * (!PORTxbits.Rxx) macros, so the code below is unchanged.) */
+ * IOsetButtons(); 1 means pressed. */
 static unsigned char in1 = 0, in2 = 0, in3 = 0;
 #define PB1 (in1)
 #define PB2 (in2)
 #define PB3 (in3)
 
-#define RESET_HOLDTIME 30   // 30 ticks = 1.5s to hold for reset (PB1 + PB2)
-
-/* MERGE NOTES (what changed):
- *  1. minutes and seconds are no longer defined here. They are defined once in
- *     countdown.c, because the countdown uses the same two variables.
- *  2. cnFlag, t2Flag, t1Ticks and running are gone, and so are the three ISRs,
- *     IOinit(), startTimer() and updateTimer(). Their jobs are done by isr.c,
- *     timers.c, buttons.c and countdown.c. Having two _CNInterrupt or two
- *     _T1Interrupt functions would not link.
- *  3. showTime() and showGroupInfo() print through display.c, which keeps every
- *     message on one line and pads it so a shorter message erases a longer one.
- *  4. startTimer() is now Timer_Start().
- *  5. T2CONbits.TON = 0 (which stopped the old repeat timer) is gone. The 50 ms
- *     repeat tick is Timer3, started and stopped in setmode.c.
- *  6. PB1, PB2 and PB3 no longer read PORTA/PORTB. They use the levels given by
- *     IOsetButtons(), so setmode.c can wait a short time to see whether another
- *     button joins before IOcheck() acts (pressing all three buttons must not
- *     first add a second).
- *  7. "if (running)" and the two "LED1 = 0" lines are gone. IOcheck() is only
- *     called while the program is in set mode, and the LEDs are already off
- *     there (the alarm is stopped before this code sees a PB1/PB2 press).
- */
+#define RESET_HOLDTIME 30 // 30 ticks = 1.5s to hold for reset (PB1 + PB2)
 
 unsigned char button = 0;
 unsigned int holdTime = 0;

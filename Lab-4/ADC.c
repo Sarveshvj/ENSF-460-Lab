@@ -11,8 +11,8 @@
 uint16_t do_ADC(void){
     uint16_t ADCvalue;
     
-    TRISAbits.TRISA3 = 1;        // Input
-    AD1PCFGbits.PCFG4 = 0;       // AN5 analog
+    TRISAbits.TRISA2 = 1;        // Input
+    AD1PCFGbits.PCFG4 = 0;       // AN4 analog
     
     // ADC configuration
     AD1CON1 = 0;
@@ -27,7 +27,7 @@ uint16_t do_ADC(void){
     AD1CON1bits.FORM = 0;        // Integer output
     AD1CON1bits.SSRC = 7;        // Auto conversion
 
-    AD1CHSbits.CH0SA = 5;        // Select AN5
+    AD1CHSbits.CH0SA = 4;        // Select AN4
     
     
     AD1CON1bits.ADON = 1;

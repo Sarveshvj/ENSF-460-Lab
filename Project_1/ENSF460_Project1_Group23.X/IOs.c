@@ -94,7 +94,7 @@ void IOcheck(void) {
             holdTime = 0;
         }
         else if (button != 2) {
-            button = 3; // another button was already held
+            button = 3; 
             holdTime = 0;
             T2CONbits.TON = 0;
         }

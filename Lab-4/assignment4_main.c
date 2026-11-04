@@ -48,7 +48,7 @@
 #pragma config DSWDTEN = ON             // Deep Sleep Watchdog Timer Enable bit (DSWDT enabled)
 
 #include "xc.h"
-#define FCY 4000000UL    // Must be BEFORE libpic30.h
+#define FCY 4000000UL
 #include <libpic30.h>
 #include "ADC.h"
 #include "UART2.h"
@@ -61,12 +61,22 @@ int main(void) {
     initCN();
     
     uint16_t value;
-    Disp2String("Hello\r\n");
+    uint16_t num_asterik;
+    
     while(1)
     {
         switch(state){
             case MODE0:
+                value = do_ADC();
+                Disp2String("\r");  
+                Disp2String("Mode 0: ");
+                num_asterik = (value * 60) / 1023 + 1;
+                XmitUART2('*', num_asterik);
+                Disp2Hex(value);
+                Disp2String("          ");
+                 __delay_ms(200);
                 break;
+                
             case MODE1:
                 break;
         }

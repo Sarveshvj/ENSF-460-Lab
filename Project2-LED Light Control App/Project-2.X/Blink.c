@@ -1,11 +1,8 @@
 /*
  * File:   Blink.c
- * Author: user
+ * Author: Sarvesh Vettrivelan
  *
  * Created on November 18, 2026, 4:32 PM
  */
 
-
-int main(void) {
-    return 0;
-}
+#include "Blink.h"

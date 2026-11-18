@@ -9,6 +9,9 @@
 #define PB2 (!PORTAbits.RA4)
 #define PB3 (!PORTBbits.RB4)
 
+#define REPEAT_TICKS 6  // 6 x 50 ms = 300 ms
+#define FAST_TICKS 40   // 40 x 50 ms = 2 seconds
+
 volatile unsigned int minutes = 0;
 volatile unsigned int seconds = 0;
 
@@ -53,42 +56,54 @@ void showTime(void) {
 }
 
 void IOcheck(void) {
-
+    
+    if (!PB1 && !PB2 && !PB3) {
+        button = 0;
+        holdTime = 0;
+        T2CONbits.TON = 0; 
+    }
+    
+    
     //PB1 is pressed
-    if(PB1 && !PB2 && !PB3) {
+    else if(PB1 && !PB2 && !PB3) {
 
-        if(button != 1) {
-
+        if (button == 0) {
             seconds++;
-
-            if(seconds >= 60) {
+            if (seconds >= 60){
                 seconds = 0;
             }
-
             showTime();
             button = 1;
             holdTime = 0;
+        }
+        else if (button != 1) {
+            button = 3;
+            holdTime = 0;
+            T2CONbits.TON = 0;
         }
     }
 
     //PB2 is pressed
     else if(PB2 && !PB1 && !PB3) {
-
-        if(button != 2) {
-
-            if(minutes < 59) {
+        if (button == 0) {
+            if (minutes < 59) {
                 minutes++;
                 showTime();
             }
-
             button = 2;
             holdTime = 0;
         }
+        else if (button != 2) {
+            button = 3; // another button was already held
+            holdTime = 0;
+            T2CONbits.TON = 0;
+        }
+        
     }
 
     //No button pressed
     else {
-
+         // other code goes here-----------------------------------//
         button = 0;
         holdTime = 0;
         T2CONbits.TON = 0;
@@ -97,38 +112,22 @@ void IOcheck(void) {
 
 void IOhold(void) {
 
-    if(button == 1 || button == 2) {
+    if (button != 1 && button != 2) return;
 
-        holdTime++;
+    holdTime++;
+    if (holdTime % REPEAT_TICKS != 0) return;
 
-        // Increase every 300ms
-        if(holdTime % 6 == 0) {
+    if (button == 1) {
+        if (holdTime >= FAST_TICKS) seconds += 5;
+        else seconds++;
 
-            if(button == 1) {
-
-                //PB1 increase a seconds
-                if(holdTime >= 40) {
-                    seconds += 5;
-                }
-                else {
-                    seconds++;
-                }
-
-                if(seconds >= 60) {
-                    seconds -= 60;
-                }
-
-                showTime();
-            }
-
-            else if(button == 2) {
-
-                //PB2 increase a minutes
-                if(minutes < 59) {
-                    minutes++;
-                    showTime();
-                }
-            }
+        if (seconds >= 60) seconds -= 60;
+        showTime();
+    }
+    else if (button == 2) {
+        if (minutes < 59) {
+            minutes++;
+            showTime();
         }
     }
 }
